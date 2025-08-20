@@ -1,0 +1,10 @@
+{
+    "local_port":1080,
+    "mode":"tcp_and_udp",
+    "server":"server.com",
+    "server_port":1080,
+    "password":"qwerty1234",
+    "method":"chacha20-ietf-poly1305",
+    "fast_open": true,
+    "timeout":86400
+}
