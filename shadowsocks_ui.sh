@@ -1,5 +1,6 @@
 #!/bin/bash
 
+BASE_NAME=$(basename "$0")
 cd $1
 LOCAL_HOST="'127.0.0.1'"
 LOCAL_PORT="1080"
@@ -13,19 +14,31 @@ function notificate {
         --expire-time=5000 \
         -h string:sound:false \
         -h int:transient:5 \
-        -a "shadowsocks_ui.sh" "$1" "$config"
+        -a "$BASE_NAME" "$1" "$config"
 }
 
-function start {
+function ssservice_start {
     config=$(cat $CURRENT_CONF)
-    ssservice local -c $config --daemonize && \
-    dconf write /system/proxy/mode "'manual'" && \
-    dconf write /system/proxy/socks/host $LOCAL_HOST && \
-    dconf write /system/proxy/socks/port $LOCAL_PORT
+    ssservice local -c $config --daemonize &&
+        dconf write /system/proxy/mode "'manual'" &&
+        dconf write /system/proxy/socks/host $LOCAL_HOST &&
+        dconf write /system/proxy/socks/port $LOCAL_PORT &&
+        notificate "Proxy enabled"
 }
 
-function kill {
-    pkill -f ssservice && dconf write /system/proxy/mode "'none'"
+function ssservice_kill {
+    pkill -f ssservice
+    if [[ $? != "1" ]]; then
+        dconf write /system/proxy/mode "'none'" &&
+            notificate "Proxy disabled"
+    else
+        ssservice_start
+    fi
+}
+
+function ssservice_restart {
+    pkill -f ssservice
+    ssservice_start
 }
 
 if [ "$2" == "--change-conf" ]; then
@@ -34,14 +47,13 @@ if [ "$2" == "--change-conf" ]; then
         --height=400 \
         --column="Cofiguration" {} +)
     if [ $? != "1" ]; then
-        echo "$choise" > $CURRENT_CONF
-        kill
-        start && notificate "Proxy enabled"
+        echo "$choise" >$CURRENT_CONF
+        ssservice_restart
     fi
 else
-    if [ $(dconf read /system/proxy/mode) == "'none'" ]; then
-        start && notificate "Proxy enabled"
+    if [ $(dconf read /system/proxy/mode) != "'manual'" ]; then
+        ssservice_start
     else
-        kill && notificate "Proxy disabled"
+        ssservice_kill
     fi
 fi

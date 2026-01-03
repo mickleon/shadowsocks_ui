@@ -20,9 +20,7 @@ After that, the "Shadowsocks" icon should be in the application menu.
 
 The script reads the dconf `/system/proxy/` settings and edits them to run the system-wide proxy. 
 
-**If you have some manual settings in `/system/proxy/`, please set it to default.**
-
-**If you already have the shadowsocks daemon running, kill it.**
+**If you already have the shadowsocks daemon running, sript will kill it.**
 
 Clicking on the icon on the desktop launches shadowsocks if it is not running (if you have `'none'` in the `/system/proxy/mode`). If it is running (if you have `'manual'` in the  `/system/proxy/mode`), clicking on the icon kills shadowsocks.
 
