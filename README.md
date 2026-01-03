@@ -2,14 +2,18 @@ This is a simple UI application for quick system-wide start of a shadowsocks loc
 
 # Dependencies
 
-To run it, you need the following packages: `shadowsocks-rust` (or any other implementation of shadowsocks), `zenity`, `notify-send`
+To run it, you need the following packages:
+
+- `shadowsocks-rust` (or any other implementation of shadowsocks)
+- `zenity`
+- `notify-send`
 
 # Installing
 
-It will create `.desktop` file according to the standard freedesktop.org:
+It will create `.desktop` file:
 
 ```
-git@github.com:mickleon/shadowsocks_ui
+git clone git@github.com:mickleon/shadowsocks_ui
 cd shadowsocks_ui
 ./install.sh
 ```
