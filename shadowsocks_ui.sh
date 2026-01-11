@@ -10,7 +10,7 @@ CURRENT_CONF=config/current_conf
 function notificate {
     config=$(cat $CURRENT_CONF)
     echo "$1"
-    notify-send -i shadowsocks \
+    notify-send --app-icon shadowsocks \
         --expire-time=5000 \
         -h string:sound:false \
         -h int:transient:5 \
